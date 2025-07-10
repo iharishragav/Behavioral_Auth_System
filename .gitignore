@@ -1,0 +1,18 @@
+
+venv-3.9/
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environments
+venv/
+
+# Environments created by Pipenv
+*.venv
+
+# macOS metadata
+.DS_Store
+
