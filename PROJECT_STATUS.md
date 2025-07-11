@@ -25,6 +25,9 @@ This document tracks the weekly progress, challenges, and next steps for the Beh
 *   **WebSocket Connection Stability:** Debugged and fixed issues with the WebSocket connection being in a `CLOSING` or `CLOSED` state, ensuring data is only sent when the connection is `OPEN`.
 *   **Missing Backend Module:** Identified and installed the missing `websockets` Python module, which was preventing the backend server from starting correctly.
 *   **Untrained ML Models:** Realized the ML models were not trained, leading to static risk scores. Implemented a temporary solution to train models with dummy data on startup.
+* WebSocket connection stability issues.
+* Missing websockets Python module.
+* ML models not trained, leading to static risk scores (temporarily resolved with dummy data training on startup).
 
 ### Next Steps for Week 2:
 
@@ -36,5 +39,9 @@ This document tracks the weekly progress, challenges, and next steps for the Beh
 *   **Begin Browser Extension Development:** Start scaffolding the browser extension to collect data from external websites.
 
 ---
+
+## Current State Note:
+
+Encountered a persistent `TypeError: handler() missing 1 required positional argument: 'path'` in the `websockets` library, despite attempts to fix the handler function in `websocket_server.py`. This suggests a potential issue with the `websockets` library installation or the virtual environment. A clean reinstallation of the virtual environment and dependencies is recommended to resolve this.
 
 

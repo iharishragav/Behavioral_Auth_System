@@ -115,8 +115,12 @@ class BehavioralDataCollector {
     generateSessionId() {
         return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
+
+    startSendingData() {
+        console.log("Collector: Starting data transmission interval.");
+        setInterval(() => this.sendDataToBackend(), 2000); // Send data every 2 seconds
+    }
 }
 
 // Initialize collector
 const collector = new BehavioralDataCollector();
-setInterval(() => collector.sendDataToBackend(), 5000);

@@ -15,6 +15,8 @@ window.socket.onopen = () => {
         userId: 'test-user',
         sessionId: 'session_' + Date.now()
     }));
+    // Start data collection after authentication message is sent
+    collector.startSendingData();
 };
 
 socket.onmessage = (event) => {
@@ -22,6 +24,15 @@ socket.onmessage = (event) => {
     
     if (data.type === 'analysis_result') {
         updateDashboard(data);
+    }
+};
+
+socket.onclose = (event) => {
+    console.log('WebSocket connection closed. Code:', event.code, 'Reason:', event.reason);
+    if (event.wasClean) {
+        console.log('Connection closed cleanly');
+    } else {
+        console.log('Connection died');
     }
 };
 

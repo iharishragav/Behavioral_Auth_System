@@ -74,11 +74,13 @@ class BehavioralWebSocketServer:
                 await self.handle_feedback(websocket, data)
                 
         except json.JSONDecodeError:
+            logging.error(f"Invalid JSON format received: {message}")
             await websocket.send(json.dumps({
                 'type': 'error',
                 'message': 'Invalid JSON format'
             }))
         except Exception as e:
+            logging.error(f"Error processing message: {e}", exc_info=True)
             await websocket.send(json.dumps({
                 'type': 'error',
                 'message': str(e)
@@ -131,6 +133,7 @@ class BehavioralWebSocketServer:
         """Handle user authentication events"""
         user_id = data.get('userId')
         session_id = data.get('sessionId')
+        logging.info(f"User authentication received: userId={user_id}, sessionId={session_id}")
         
         # Create a new user profile if one doesn't exist
         if user_id not in self.analyzer.user_profiles:
@@ -161,6 +164,7 @@ class BehavioralWebSocketServer:
 
 async def main():
     server = BehavioralWebSocketServer()
+
     async with websockets.serve(server.register_client, "localhost", 8765):
         await asyncio.Future()  # run forever
 
