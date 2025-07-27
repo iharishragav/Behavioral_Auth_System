@@ -16,3 +16,4 @@ optuna
 mlflow
 psycopg2-binary
 redis
+websockets

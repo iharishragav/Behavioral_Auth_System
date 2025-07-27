@@ -1,7 +1,8 @@
 
 // behavioral-collector.js
 class BehavioralDataCollector {
-    constructor() {
+    constructor(userId) {
+        this.userId = userId;
         this.keystrokeData = [];
         this.mouseData = [];
         this.sessionId = this.generateSessionId();
@@ -88,7 +89,7 @@ class BehavioralDataCollector {
         console.log('Collector: Attempting to send data. WebSocket state:', window.socket.readyState);
         const payload = {
             type: 'behavioral_data',
-            userId: 'test-user',
+            userId: this.userId,
             sessionId: this.sessionId,
             keystrokeData: this.keystrokeData,
             mouseData: this.mouseData,
@@ -123,4 +124,4 @@ class BehavioralDataCollector {
 }
 
 // Initialize collector
-const collector = new BehavioralDataCollector();
+const collector = new BehavioralDataCollector(userId);

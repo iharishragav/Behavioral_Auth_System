@@ -2,14 +2,18 @@ import asyncio
 import websockets
 import json
 import logging
+import os
 from ml.behavioral_analyzer import BehavioralAnalyzer
 from datetime import datetime
+
+# A simple, hardcoded token for authentication.
+# In a real application, this should be a securely generated and managed token.
+AUTH_TOKEN = os.environ.get("AUTH_TOKEN", "your-secret-auth-token")
 
 class BehavioralWebSocketServer:
     def __init__(self):
         self.analyzer = BehavioralAnalyzer()
         # Ensure models directory exists
-        import os
         if not os.path.exists('models'):
             os.makedirs('models')
         self.analyzer.load_models()
@@ -46,8 +50,19 @@ class BehavioralWebSocketServer:
         self.analyzer.train_global_model(dummy_data)
         print("Initial models trained and saved.")
 
-    async def register_client(self, websocket, path):
+    async def register_client(self, websocket, path=None):
         """Register new client connection"""
+        try:
+            # The first message should be an authentication token.
+            auth_message = await websocket.recv()
+            auth_data = json.loads(auth_message)
+            if auth_data.get('token') != AUTH_TOKEN:
+                await websocket.close(code=1008, reason="Invalid authentication token")
+                return
+        except (websockets.exceptions.ConnectionClosed, json.JSONDecodeError):
+            await websocket.close(code=1008, reason="Authentication failed")
+            return
+
         self.connected_clients.add(websocket)
         print(f"Client connected: {websocket.remote_address}")
         
@@ -164,8 +179,10 @@ class BehavioralWebSocketServer:
 
 async def main():
     server = BehavioralWebSocketServer()
+    host = os.environ.get("WEBSOCKET_HOST", "localhost")
+    port = int(os.environ.get("WEBSOCKET_PORT", 8765))
 
-    async with websockets.serve(server.register_client, "localhost", 8765):
+    async with websockets.serve(server.register_client, host, port):
         await asyncio.Future()  # run forever
 
 if __name__ == "__main__":
