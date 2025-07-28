@@ -188,7 +188,7 @@ class BehavioralAnalyzer:
             'mouseData': mouse_data
         }
         
-        features = self.extract_features(behavioral_.pydata)
+        features = self.extract_features(behavioral_data)
         
         if not features:
             return 0.0
