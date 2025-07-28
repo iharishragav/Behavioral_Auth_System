@@ -64,6 +64,9 @@ class BehavioralFeatureExtractor:
         """Extract features from mouse dynamics"""
         features = {}
         
+        if not mouse_data:
+            return self.get_default_mouse_features()
+        
         df = pd.DataFrame(mouse_data)
         
         if len(df) < 5:
